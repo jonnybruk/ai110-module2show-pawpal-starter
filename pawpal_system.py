@@ -80,7 +80,54 @@ class Scheduler:
         """Organize tasks, e.g., sort by time or priority."""
         # For simplicity, sort by time
         return sorted(tasks, key=lambda t: t.time or datetime.max)
-    
+
+    def sort_by_time(self, tasks: List[Task]) -> List[Task]:
+        """Sort tasks by their time in HH:MM format."""
+        return sorted(
+            tasks,
+            key=lambda t: t.time.strftime("%H:%M") if t.time else "99:99",
+        )
+
+    def get_pending_tasks(self, tasks: List[Task]) -> List[Task]:
+        """Return only tasks that are not completed."""
+        return [task for task in tasks if not task.completion_status]
+
+    def mark_task_complete(self, task: Task) -> None:
+        """Mark a task as complete and roll forward daily tasks."""
+        task.mark_completed()
+
+        if task.frequency.lower() == "daily":
+            next_task = Task()
+            next_task.description = task.description
+            next_task.frequency = task.frequency
+            next_task.time = task.time + timedelta(days=1) if task.time else None
+            # keep completion status as False for the next occurrence
+            next_task.completion_status = False
+            self.owner.pets[0].add_task(next_task) if self.owner.pets else None
+
+    def check_conflicts(self) -> List[str]:
+        """Detect overlapping tasks for the same pet at the same time."""
+        warnings: List[str] = []
+        for pet in self.owner.pets:
+            # group tasks by timestamp (only exact same datetime values are considered overlaps)
+            tasks_by_time = {}
+            for task in pet.tasks:
+                if task.time is None:
+                    continue
+                key = task.time
+                tasks_by_time.setdefault(key, []).append(task)
+
+            for time_point, tasks_in_slot in tasks_by_time.items():
+                if len(tasks_in_slot) > 1:
+                    descriptions = ", ".join([t.description for t in tasks_in_slot])
+                    warning = (
+                        f"Conflict for pet '{pet.name}' at {time_point.strftime('%Y-%m-%d %H:%M')}: "
+                        f"{descriptions}"
+                    )
+                    warnings.append(warning)
+
+        return warnings
+
     def manage_tasks(self) -> None:
         """Manage tasks, e.g., check for overdue tasks."""
         tasks = self.retrieve_tasks()
