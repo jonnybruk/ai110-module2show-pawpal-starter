@@ -2,25 +2,28 @@ from datetime import datetime
 from typing import List
 
 
-class Owner:
-    """Represents a pet owner."""
+class Task:
+    """Represents a single activity."""
     
     def __init__(self):
-        self.name: str = ""
-        self.email: str = ""
-        self.pets: List[Pet] = []
+        self.description: str = ""
+        self.time: datetime = None
+        self.frequency: str = ""
+        self.completion_status: bool = False
     
-    def add_pet(self, pet: 'Pet') -> None:
-        """Add a pet to the owner's collection."""
-        pass
+    def mark_completed(self) -> None:
+        """Mark this task as completed."""
+        self.completion_status = True
     
-    def get_pets(self) -> List['Pet']:
-        """Retrieve all pets owned by this owner."""
-        pass
+    def is_overdue(self) -> bool:
+        """Check if this task is overdue."""
+        if self.time and not self.completion_status:
+            return datetime.now() > self.time
+        return False
 
 
 class Pet:
-    """Represents a pet."""
+    """Stores pet details and a list of tasks."""
     
     def __init__(self):
         self.name: str = ""
@@ -30,66 +33,58 @@ class Pet:
         self.health_notes: str = ""
         self.tasks: List[Task] = []
     
-    def add_task(self, task: 'Task') -> None:
+    def add_task(self, task: Task) -> None:
         """Add a task for this pet."""
-        pass
+        self.tasks.append(task)
     
-    def get_tasks(self) -> List['Task']:
+    def get_tasks(self) -> List[Task]:
         """Retrieve all tasks for this pet."""
-        pass
+        return self.tasks
 
 
-class Task:
-    """Represents a pet care task."""
+class Owner:
+    """Manages multiple pets and provides access to all their tasks."""
     
     def __init__(self):
-        self.type: str = ""  # walk, feeding, meds, grooming, enrichment
-        self.duration_minutes: int = 0
-        self.priority: int = 0
-        self.due_time: datetime = None
-        self.is_completed: bool = False
+        self.name: str = ""
+        self.email: str = ""
+        self.pets: List[Pet] = []
     
-    def mark_completed(self) -> None:
-        """Mark this task as completed."""
-        pass
+    def add_pet(self, pet: Pet) -> None:
+        """Add a pet to the owner's collection."""
+        self.pets.append(pet)
     
-    def is_overdue(self) -> bool:
-        """Check if this task is overdue."""
-        pass
+    def get_pets(self) -> List[Pet]:
+        """Retrieve all pets owned by this owner."""
+        return self.pets
+    
+    def get_all_tasks(self) -> List[Task]:
+        """Retrieve all tasks from all pets."""
+        all_tasks = []
+        for pet in self.pets:
+            all_tasks.extend(pet.tasks)
+        return all_tasks
 
 
-class Constraint:
-    """Represents scheduling constraints for the planner."""
+class Scheduler:
+    """The 'Brain' that retrieves, organizes, and manages tasks across pets."""
     
-    def __init__(self):
-        self.available_minutes: int = 0
-        self.preferences: List[str] = []
-        self.blocked_times: List[datetime] = []
+    def __init__(self, owner: Owner):
+        self.owner = owner
     
-    def fits(self, task: Task) -> bool:
-        """Check if a task fits within the constraints."""
-        pass
+    def retrieve_tasks(self) -> List[Task]:
+        """Retrieve all tasks from the owner."""
+        return self.owner.get_all_tasks()
     
-    def explain_fit(self, task: Task) -> str:
-        """Explain why or why not a task fits the constraints."""
-        pass
+    def organize_tasks(self, tasks: List[Task]) -> List[Task]:
+        """Organize tasks, e.g., sort by time or priority."""
+        # For simplicity, sort by time
+        return sorted(tasks, key=lambda t: t.time or datetime.max)
+    
+    def manage_tasks(self) -> None:
+        """Manage tasks, e.g., check for overdue tasks."""
+        tasks = self.retrieve_tasks()
+        for task in tasks:
+            if task.is_overdue():
+                print(f"Task '{task.description}' is overdue!")
 
-
-class DailyPlanner:
-    """Generates daily pet care plans based on constraints."""
-    
-    def __init__(self):
-        self.selected_tasks: List[Task] = []
-        self.reasoning: str = ""
-    
-    def generate_plan(self, pet: Pet, constraint: Constraint) -> None:
-        """Generate a daily plan for a pet given constraints."""
-        pass
-    
-    def rank_tasks(self, tasks: List[Task]) -> List[Task]:
-        """Rank tasks by priority and other factors."""
-        pass
-    
-    def explain_plan(self) -> str:
-        """Provide an explanation of the generated plan."""
-        pass

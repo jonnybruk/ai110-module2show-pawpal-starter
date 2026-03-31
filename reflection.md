@@ -8,12 +8,21 @@
 
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
+Owner - Represents the user of the app and store basic info and manage a list of pets.
+
+Pet - Represents one animal and holds pet details and the list of care tasks for that pet.
+
+Task - Represents a single care activity and stores task info (type, duration, priority, due time) and track completion.
+
+Constraint - Represents the owner’s limits for the day and stores available time and preferences, and check whether tasks fit those limits.
+
+DailyPlanner - The decision‑maker of the system and rank tasks, choose which ones fit the day’s constraints, and explain why they were selected or skipped.
 
 **b. Design changes**
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
-
+Replaced Constraint and DailyPlanner with Scheduler to simplify things.
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
