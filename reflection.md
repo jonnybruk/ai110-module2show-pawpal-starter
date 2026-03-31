@@ -2,6 +2,8 @@
 
 ## 1. System Design
 
+- Track pet care tasks, Consider constraints, Produce a daily plan and explain why it chose that plan
+
 **a. Initial design**
 
 - Briefly describe your initial UML design.
