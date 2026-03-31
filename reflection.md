@@ -29,13 +29,13 @@ Replaced Constraint and DailyPlanner with Scheduler to simplify things.
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+- What constraints does your scheduler consider (for example: time, priority, preferences)? time and pet associations
+- How did you decide which constraints mattered most? time mattered most to ensure chronological routine
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+- Describe one tradeoff your scheduler makes. it checks for time overlaps rather than duration-based conflicts
+- Why is that tradeoff reasonable for this scenario? exact time matching is simple to implement and cover the most common errors w/o needing complex time block logic
 
 ---
 
@@ -43,13 +43,13 @@ Replaced Constraint and DailyPlanner with Scheduler to simplify things.
 
 **a. How you used AI**
 
-- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
-- What kinds of prompts or questions were most helpful?
+- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)? for brainstorming, generating pytest functions, and refactoring
+- What kinds of prompts or questions were most helpful? "how do I check if an object exists in st.session_state?"
 
 **b. Judgment and verification**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
-- How did you evaluate or verify what the AI suggested?
+- Describe one moment where you did not accept an AI suggestion as-is. when AI suggested to use a complex database early on
+- How did you evaluate or verify what the AI suggested? by running pytest
 
 ---
 
@@ -57,13 +57,13 @@ Replaced Constraint and DailyPlanner with Scheduler to simplify things.
 
 **a. What you tested**
 
-- What behaviors did you test?
-- Why were these tests important?
+- What behaviors did you test? task completion and pet-association
+- Why were these tests important? they ensured data isn't lost during the bridge between backend logic and streamlit UI
 
 **b. Confidence**
 
-- How confident are you that your scheduler works correctly?
-- What edge cases would you test next if you had more time?
+- How confident are you that your scheduler works correctly? 5/5
+- What edge cases would you test next if you had more time? overlapping tasks
 
 ---
 
@@ -71,12 +71,12 @@ Replaced Constraint and DailyPlanner with Scheduler to simplify things.
 
 **a. What went well**
 
-- What part of this project are you most satisfied with?
+- What part of this project are you most satisfied with? integrating scheduler class w/ streamlit UI
 
 **b. What you would improve**
 
-- If you had another iteration, what would you improve or redesign?
+- If you had another iteration, what would you improve or redesign? i would redesign the "Task" class to include categories and add a calendar view
 
 **c. Key takeaway**
 
-- What is one important thing you learned about designing systems or working with AI on this project?
+- What is one important thing you learned about designing systems or working with AI on this project? AI is a powerful tool for syntax but the human architect must define the logic and constraints to keep the project on track.
